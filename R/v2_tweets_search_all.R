@@ -53,7 +53,8 @@ v2_tweets_search_all <- function(
   tweet.fields = NULL,
   until_id = NULL,
   user.fields = NULL,
-  token = NULL
+  token = NULL,
+  parse = TRUE
 ) {
   
   # TODO later: input validation // probably want a separate utils file
@@ -77,17 +78,29 @@ v2_tweets_search_all <- function(
   
   # from the docs: This endpoint can deliver up to 500 Tweets per request in reverse-chronological order, and pagination tokens are provided for paging through large sets of matching Tweets.
   
-  results <- TWIT_paginate_cursor(
+  results <- TWIT_get(
     token, "/2/tweets/search/all", params, 
-    page_size = 500, 
-    n = n,
-    retryonratelimit = retryonratelimit,
-    cursor = cursor,
-    verbose = verbose
+    parse = parse,
   )
+  
+  
+  # results <- TWIT_paginate_cursor(
+  #   token, "/2/tweets/search/all", params, 
+  #   page_size = 500, 
+  #   n = n,
+  #   retryonratelimit = retryonratelimit,
+  #   cursor = cursor,
+  #   verbose = verbose
+  # )
   
   results
 }
+
+v2_tweets_search_all(query = "#rstats", token = bearer_token())
+
+# TODO: should start by using TWIT_get() to get data that can be returned in a single page
+
+# TWIT_get
 
 
 # https://developer.twitter.com/en/docs/pagination
